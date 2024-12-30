@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '1.8.10'
+	id 'fabric-loom' version '1.9.2'
 	id 'maven-publish'
 }
 
@@ -39,7 +39,7 @@ afterEvaluate {
 }
 
 dependencies {
-	vineflowerDecompilerClasspath "org.vineflower:vineflower:1.11.0-20240911.205325-50"
+	vineflowerDecompilerClasspath "org.vineflower:vineflower:1.11.0-20241216.173618-56"
 
 	// To change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
