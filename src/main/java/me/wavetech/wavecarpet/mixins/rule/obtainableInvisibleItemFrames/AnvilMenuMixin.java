@@ -53,7 +53,7 @@ public class AnvilMenuMixin {
 			));
 			data.put("Invisible", ByteTag.ONE);
 			stack.set(DataComponents.ENTITY_DATA, CustomData.of(data));
-			value = (T) Component.literal("Invisible " + item.getDescription().getString())
+			value = (T) Component.literal("Invisible " + item.getName().getString())
 					.setStyle(Style.EMPTY.withItalic(false));
 		}
 		//noinspection MixinExtrasOperationParameters

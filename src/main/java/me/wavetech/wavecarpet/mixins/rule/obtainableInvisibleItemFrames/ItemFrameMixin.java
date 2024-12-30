@@ -42,7 +42,7 @@ public abstract class ItemFrameMixin extends Entity {
 			stack.set(DataComponents.ENTITY_DATA, CustomData.of(data));
 			stack.set(
 				DataComponents.CUSTOM_NAME,
-				Component.literal("Invisible " + item.getDescription().getString())
+				Component.literal("Invisible " + item.getName().getString())
 					.setStyle(Style.EMPTY.withItalic(false))
 			);
 		}
