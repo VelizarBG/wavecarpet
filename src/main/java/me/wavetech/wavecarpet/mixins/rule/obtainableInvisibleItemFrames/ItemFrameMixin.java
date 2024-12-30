@@ -11,6 +11,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.decoration.GlowItemFrame;
 import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemFrameItem;
@@ -20,13 +21,13 @@ import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
-@Mixin(ItemFrame.class)
+@Mixin({ ItemFrame.class, GlowItemFrame.class })
 public abstract class ItemFrameMixin extends Entity {
 	public ItemFrameMixin(EntityType<?> entityType, Level level) {
 		super(entityType, level);
 	}
 
-	@ModifyExpressionValue(method = "dropItem(Lnet/minecraft/world/entity/Entity;Z)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/decoration/ItemFrame;getFrameItemStack()Lnet/minecraft/world/item/ItemStack;"))
+	@ModifyExpressionValue(method = "getFrameItemStack", at = @At(value = "NEW", target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"))
 	private ItemStack makeDroppedFrameInvisible(ItemStack stack) {
 		Item item = stack.getItem();
 		if (WaveCarpetSettings.obtainableInvisibleItemFrames

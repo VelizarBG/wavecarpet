@@ -44,7 +44,7 @@ public class AnvilMenuMixin {
 	private <T> T tryConvertRenamedFrame(ItemStack stack, DataComponentType<? super T> component, @Nullable T value, Operation<T> original) {
 		Item item = stack.getItem();
 		if (WaveCarpetSettings.obtainableInvisibleItemFrames
-			&& item instanceof ItemFrameItem && this.itemName.equals("invisible")) {
+			&& item instanceof ItemFrameItem && this.itemName.toLowerCase().equals("invisible")) {
 			var data = new CompoundTag();
 			data.put("id", StringTag.valueOf(
 				BuiltInRegistries.ENTITY_TYPE
