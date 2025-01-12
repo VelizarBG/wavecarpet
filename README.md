@@ -20,7 +20,7 @@ Increases by 1 for the player who triggered an update suppression.
 
 ### Player container loading
 Server side implementation of TweakerMore's `autoFillContainer` for use with Carpet bots.\
-Toggled with `/carpet {player} loadItems`.\
+Toggled with `/player {player} loadItems`.\
 Whenever a container is opened by the player, it will move as many items as possible in it.
 
 ### Import player statistics into scoreboard objectives
@@ -44,3 +44,11 @@ Prevents opped players from bypassing the whitelist.
 - Type: `boolean`
 - Default: `false`
 - Category: `WaveTech`, `creative`
+
+### Store piston bolt encodings
+Use the command `/pistonbolt location` to store location encodings.\
+Maps a location name to a number or string.
+- Name: `commandPistonBolt`
+- Type: `String`
+- Default: `false`
+- Category: `WaveTech`, `survival`, `command`
