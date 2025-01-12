@@ -5,7 +5,9 @@ import carpet.CarpetServer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import me.wavetech.wavecarpet.core.PistonBoltState;
 import net.fabricmc.api.ModInitializer;
+import net.minecraft.server.MinecraftServer;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +21,8 @@ import java.util.Map;
 public class WaveCarpetMod implements ModInitializer, CarpetExtension {
 	public static final Logger LOGGER = LoggerFactory.getLogger("wavecarpet");
 
+	public static PistonBoltState pistonBoltState;
+
 	@Override
 	public void onInitialize() {
 		CarpetServer.manageExtension(new WaveCarpetMod());
@@ -27,6 +31,11 @@ public class WaveCarpetMod implements ModInitializer, CarpetExtension {
 	@Override
 	public void onGameStarted() {
 		CarpetServer.settingsManager.parseSettingsClass(WaveCarpetSettings.class);
+	}
+
+	@Override
+	public void onServerLoadedWorlds(MinecraftServer server) {
+		pistonBoltState = PistonBoltState.load(server);
 	}
 
 	@Override
