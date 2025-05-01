@@ -7,6 +7,7 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectIterator;
 import me.wavetech.wavecarpet.WaveCarpetSettings;
 import me.wavetech.wavecarpet.access.TicketStorageExtension;
+import net.minecraft.server.level.ChunkHolder;
 import net.minecraft.server.level.ChunkMap;
 import net.minecraft.server.level.Ticket;
 import net.minecraft.server.level.TicketType;
@@ -55,10 +56,12 @@ public abstract class TicketStorageMixin extends SavedData implements TicketStor
 			boolean bl3 = false;
 
 			if (WaveCarpetSettings.fixEarlyTicketExpiration) {
-				boolean isSaveSyncDone = ((ChunkMapAccessor) chunkMap).callGetUpdatingChunkIfPresent(entry.getLongKey())
-					.getSaveSyncFuture().isDone();
-				if (!isSaveSyncDone) {
-					continue;
+				ChunkHolder updatingChunk = ((ChunkMapAccessor) chunkMap).callGetUpdatingChunkIfPresent(entry.getLongKey());
+				if (updatingChunk != null) {
+					boolean isSaveSyncDone = updatingChunk.getSaveSyncFuture().isDone();
+					if (!isSaveSyncDone) {
+						continue;
+					}
 				}
 			}
 
