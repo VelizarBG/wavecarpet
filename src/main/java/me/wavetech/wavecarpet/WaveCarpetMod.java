@@ -35,7 +35,7 @@ public class WaveCarpetMod implements ModInitializer, CarpetExtension {
 
 	@Override
 	public void onServerLoadedWorlds(MinecraftServer server) {
-		pistonBoltState = PistonBoltState.load(server);
+		pistonBoltState = server.overworld().getDataStorage().computeIfAbsent(PistonBoltState.TYPE);
 	}
 
 	@Override
