@@ -24,7 +24,8 @@
     ],
     "custom": {
         "loom:injected_interfaces" : {
-            "net/minecraft/class_3222": ["me/wavetech/wavecarpet/access/PlayerLoader"]
+            "net/minecraft/class_3222": ["me/wavetech/wavecarpet/access/PlayerLoader"],
+            "net/minecraft/class_10592": ["me/wavetech/wavecarpet/access/TicketStorageExtension"]
         }
     },
     "depends": {
