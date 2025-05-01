@@ -25,4 +25,7 @@ public class WaveCarpetSettings {
 
 	@Rule(categories = { WAVETECH, SURVIVAL })
 	public static boolean fixEarlyTicketExpiration = false;
+
+	@Rule(categories = { WAVETECH, FEATURE })
+	public static boolean portablePearlCannon = false;
 }

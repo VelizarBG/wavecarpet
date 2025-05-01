@@ -13,6 +13,8 @@
     "carpet.rule.commandPistonBolt.extra.0": "Makes it possible to store and query bolt location encodings",
     "carpet.rule.fixEarlyTicketExpiration.desc": "Fix Early Ticket Expiration",
     "carpet.rule.fixEarlyTicketExpiration.extra.0": "Stops chunk tickets from ticking when their chunk isn't completely loaded.",
+    "carpet.rule.portablePearlCannon.desc": "Portable Pearl Cannon",
+    "carpet.rule.portablePearlCannon.extra.0": "Multiplies the horizontal velocity of ender pearls by 1000 when thrown",
     "commands.importstatstoscoreboard.importing": "There is an ongoing importing procedure.",
     "commands.importstatstoscoreboard.success": "Started importing stats into objectives...",
     "commands.pistonbolt.location.invalid": "Location '%s' does not exist",

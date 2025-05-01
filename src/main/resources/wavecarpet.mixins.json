@@ -17,6 +17,7 @@
         "rule.obtainableInvisibleItemFrames.AnvilMenuMixin",
         "rule.obtainableInvisibleItemFrames.HangingEntityItemAccessor",
         "rule.obtainableInvisibleItemFrames.ItemFrameMixin",
+        "rule.portablePearlCannon.ThrownEnderpearlMixin",
         "rule.stopLightRecalculationDataFix.ChunkDeleteLightFixMixin",
         "utils.customCriteria.ObjectiveCriteriaAccessor",
         "utils.customCriteria.ObjectiveCriteriaMixin",
