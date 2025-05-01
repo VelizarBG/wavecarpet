@@ -28,4 +28,7 @@ public class WaveCarpetSettings {
 
 	@Rule(categories = { WAVETECH, FEATURE })
 	public static boolean portablePearlCannon = false;
+
+	@Rule(categories = { WAVETECH, FEATURE })
+	public static boolean dontSaveChunks = false;
 }

@@ -11,6 +11,7 @@
         "command.player.loadItems.ServerPlayerMixin",
         "feats.suppressionCount.PacketUtilsMixin",
         "rule.disableOpsBypassWhitelist.DedicatedPlayerListMixin",
+        "rule.dontSaveChunks.RegionFileStorageMixin",
         "rule.fixEarlyTicketExpiration.ChunkMapAccessor",
         "rule.fixEarlyTicketExpiration.ServerChunkCacheMixin",
         "rule.fixEarlyTicketExpiration.TicketStorageMixin",
