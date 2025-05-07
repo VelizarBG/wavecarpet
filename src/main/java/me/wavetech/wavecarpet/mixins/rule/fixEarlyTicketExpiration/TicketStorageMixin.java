@@ -24,7 +24,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.function.Predicate;
 
-@Mixin(TicketStorage.class)
+@Mixin(value = TicketStorage.class, priority = 999)
 public abstract class TicketStorageMixin extends SavedData implements TicketStorageExtension {
 	@Shadow @Final private Long2ObjectOpenHashMap<List<Ticket>> tickets;
 	@Shadow @Nullable private TicketStorage.@Nullable ChunkUpdated loadingChunkUpdatedListener;
