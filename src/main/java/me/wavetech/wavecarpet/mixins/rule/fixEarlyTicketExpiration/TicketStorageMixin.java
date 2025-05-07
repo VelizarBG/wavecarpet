@@ -55,19 +55,20 @@ public abstract class TicketStorageMixin extends SavedData implements TicketStor
 			boolean bl2 = false;
 			boolean bl3 = false;
 
+			boolean isChunkUpdated = true;
 			if (WaveCarpetSettings.fixEarlyTicketExpiration) {
 				ChunkHolder updatingChunk = ((ChunkMapAccessor) chunkMap).callGetUpdatingChunkIfPresent(entry.getLongKey());
 				if (updatingChunk != null) {
-					boolean isSaveSyncDone = updatingChunk.getSaveSyncFuture().isDone();
-					if (!isSaveSyncDone) {
-						continue;
-					}
+					isChunkUpdated = updatingChunk.isReadyForSaving();
 				}
 			}
 
 			while (iterator.hasNext()) {
 				Ticket ticket = iterator.next();
-				if (predicate.test(ticket)) {
+				// We tick simulating tickets once their chunk is updated/loaded
+				// to ensure continuity of self-sustaining gameplay elements, such as
+				// ender pearls and (nether) portals.
+				if ((isChunkUpdated || !ticket.getType().doesSimulate()) && predicate.test(ticket)) {
 					if (tickets != null) {
 						List<Ticket> list = tickets.computeIfAbsent(
 							entry.getLongKey(), (Long2ObjectFunction<? extends List<Ticket>>) (chunkPos -> new ObjectArrayList<>(entry.getValue().size()))
