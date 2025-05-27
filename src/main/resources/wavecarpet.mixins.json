@@ -20,6 +20,7 @@
         "rule.obtainableInvisibleItemFrames.ItemFrameMixin",
         "rule.portablePearlCannon.ThrownEnderpearlMixin",
         "rule.stopLightRecalculationDataFix.ChunkDeleteLightFixMixin",
+        "rule.fixInteractiveCollisions.EntityMixin",
         "utils.customCriteria.ObjectiveCriteriaAccessor",
         "utils.customCriteria.ObjectiveCriteriaMixin",
         "utils.customCriteria.ScoreboardCommandMixin"

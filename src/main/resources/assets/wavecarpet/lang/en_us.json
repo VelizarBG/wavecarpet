@@ -17,6 +17,8 @@
     "carpet.rule.portablePearlCannon.extra.0": "Multiplies the horizontal velocity of ender pearls by 1000 when thrown",
     "carpet.rule.dontSaveChunks.desc": "Don't Save Chunks",
     "carpet.rule.dontSaveChunks.extra.0": "When enabled, stops chunks from being saved to disk, then resumes saving when disabled.",
+    "carpet.rule.fixInteractiveCollisions.desc": "Fix InteractiveCollisions",
+    "carpet.rule.fixInteractiveCollisions.extra.0": "When enabled, stops entities' interactive collisions from causing lag via excessively loading chunks.",
     "commands.importstatstoscoreboard.importing": "There is an ongoing importing procedure.",
     "commands.importstatstoscoreboard.success": "Started importing stats into objectives...",
     "commands.pistonbolt.location.invalid": "Location '%s' does not exist",

@@ -31,4 +31,7 @@ public class WaveCarpetSettings {
 
 	@Rule(categories = { WAVETECH, FEATURE })
 	public static boolean dontSaveChunks = false;
+
+	@Rule(categories = { WAVETECH, SURVIVAL })
+	public static boolean fixInteractiveCollisions = false;
 }
