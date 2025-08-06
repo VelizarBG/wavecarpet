@@ -9,6 +9,7 @@
         "command.player.loadItems.EntityPlayerActionPackMixin",
         "command.player.loadItems.PlayerCommandMixin",
         "command.player.loadItems.ServerPlayerMixin",
+        "command.player.startFallFlying.PlayerCommandMixin",
         "feats.suppressionCount.PacketUtilsMixin",
         "rule.disableOpsBypassWhitelist.DedicatedPlayerListMixin",
         "rule.obtainableInvisibleItemFrames.AnvilMenuMixin",
