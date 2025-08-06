@@ -1,5 +1,7 @@
 package me.wavetech.wavecarpet.mixins.rule.obtainableInvisibleItemFrames;
 
+import com.llamalad7.mixinextras.expression.Definition;
+import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import me.wavetech.wavecarpet.WaveCarpetSettings;
@@ -20,27 +22,18 @@ import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Slice;
 
 @Mixin(AnvilMenu.class)
 public class AnvilMenuMixin {
 	@Shadow private @Nullable String itemName;
 
 	@SuppressWarnings("unchecked")
-	@WrapOperation(
-		method = "createResult",
-		slice = @Slice(
-			from = @At(
-				value = "INVOKE",
-				target = "Lnet/minecraft/util/StringUtil;isBlank(Ljava/lang/String;)Z",
-				args = "")
-		),
-		at = @At(
-			value = "INVOKE",
-			target = "Lnet/minecraft/world/item/ItemStack;set(Lnet/minecraft/core/component/DataComponentType;Ljava/lang/Object;)Ljava/lang/Object;",
-			ordinal = 0
-		)
-	)
+	@Definition(id = "set", method = "Lnet/minecraft/world/item/ItemStack;set(Lnet/minecraft/core/component/DataComponentType;Ljava/lang/Object;)Ljava/lang/Object;")
+	@Definition(id = "CUSTOM_NAME", field = "Lnet/minecraft/core/component/DataComponents;CUSTOM_NAME:Lnet/minecraft/core/component/DataComponentType;")
+	@Definition(id = "literal", method = "Lnet/minecraft/network/chat/Component;literal(Ljava/lang/String;)Lnet/minecraft/network/chat/MutableComponent;")
+	@Definition(id = "itemName", field = "Lnet/minecraft/world/inventory/AnvilMenu;itemName:Ljava/lang/String;")
+	@Expression("?.set(CUSTOM_NAME, literal(this.itemName))")
+	@WrapOperation(method = "createResult", at = @At(value = "MIXINEXTRAS:EXPRESSION", ordinal = 0))
 	private <T> T tryConvertRenamedFrame(ItemStack stack, DataComponentType<? super T> component, @Nullable T value, Operation<T> original) {
 		Item item = stack.getItem();
 		if (WaveCarpetSettings.obtainableInvisibleItemFrames
