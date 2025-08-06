@@ -12,6 +12,10 @@ Prevents the ChunkDeleteLightFix DataFix from erasing the light data out of <=1.
 - Default: `false`
 - Category: `WaveTech`
 
+### Server-side global config
+Makes the `config/carpet` directory functional on the server.\
+Useful for having a global config for multiple servers if one utilizes symlinks.
+
 ### Suppression counter
 Registers the scoreboard criterion `suppressionCount`.\
 Can be accessed with 
@@ -22,6 +26,10 @@ Increases by 1 for the player who triggered an update suppression.
 Server side implementation of TweakerMore's `autoFillContainer` for use with Carpet bots.\
 Toggled with `/player {player} loadItems`.\
 Whenever a container is opened by the player, it will move as many items as possible in it.
+
+### Enable player's `fallFlying` flag
+Makes it possible to enable the player's `fallFlying` flag to make them fly while they are falling with an equipped elytra.
+Enabled with `/player {player} startFallFlying`
 
 ### Import player statistics into scoreboard objectives
 Creates and updates a scoreboard objective for every existing player statistic.\
@@ -52,3 +60,10 @@ Maps a location name to a number or string.
 - Type: `String`
 - Default: `false`
 - Category: `WaveTech`, `survival`, `command`
+
+### Allow placing master blocks
+Makes it possible to place "master" blocks (i.e. command blocks, structure blocks, etc.) in survival.\
+- Name: `allowPlacingMasterBlocks`
+- Type: `boolean`
+- Default: `false`
+- Category: `WaveTech`, `survival`, `feature`

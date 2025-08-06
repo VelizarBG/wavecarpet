@@ -22,4 +22,7 @@ public class WaveCarpetSettings {
 
 	@Rule(categories = { WAVETECH, SURVIVAL, COMMAND }, options = { "true", "false", "ops", "0", "1", "2", "3", "4" })
 	public static String commandPistonBolt = "false";
+
+	@Rule(categories = { WAVETECH, SURVIVAL, FEATURE })
+	public static boolean allowPlacingMasterBlocks = false;
 }

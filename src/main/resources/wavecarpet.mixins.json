@@ -9,7 +9,11 @@
         "command.player.loadItems.EntityPlayerActionPackMixin",
         "command.player.loadItems.PlayerCommandMixin",
         "command.player.loadItems.ServerPlayerMixin",
+        "command.player.startFallFlying.PlayerCommandMixin",
+        "feats.serversideGlobalConfig.CarpetMixin",
+        "feats.serversideGlobalConfig.CarpetScriptServerMixin",
         "feats.suppressionCount.PacketUtilsMixin",
+        "rule.allowPlacingMasterBlocks.GameMasterBlockItemMixin",
         "rule.disableOpsBypassWhitelist.DedicatedPlayerListMixin",
         "rule.obtainableInvisibleItemFrames.AnvilMenuMixin",
         "rule.obtainableInvisibleItemFrames.HangingEntityItemAccessor",
@@ -23,5 +27,8 @@
     ],
     "injectors": {
         "defaultRequire": 1
+    },
+    "mixinextras": {
+        "minVersion": "0.5.0"
     }
 }
