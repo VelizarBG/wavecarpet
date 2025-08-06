@@ -1,12 +1,9 @@
 package me.wavetech.wavecarpet.core;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtOps;
-import net.minecraft.server.MinecraftServer;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.world.level.saveddata.SavedData;
-import net.minecraft.world.level.storage.DimensionDataStorage;
+import net.minecraft.world.level.saveddata.SavedDataType;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,8 +13,15 @@ public class PistonBoltState extends SavedData {
 	public static final int VERSION = 1;
 	public static final String STATE_VERSION_KEY = "state_version";
 	public static final String LOCATION_ENCODINGS_KEY = "location_encodings";
-	private static final Codec<Map<String, String>> BOLT_ENCODINGS_CODEC = Codec.unboundedMap(Codec.STRING, Codec.STRING)
+	public static final Codec<Map<String, String>> BOLT_ENCODINGS_CODEC = Codec.unboundedMap(Codec.STRING, Codec.STRING)
 		.xmap(HashMap::new, Function.identity());
+	public static final Codec<PistonBoltState> CODEC = RecordCodecBuilder.create(
+		instance -> instance.group(
+			BOLT_ENCODINGS_CODEC.fieldOf(LOCATION_ENCODINGS_KEY).forGetter(i -> i.locationEncodings),
+			Codec.INT.fieldOf(STATE_VERSION_KEY).forGetter(i -> VERSION)
+		).apply(instance, PistonBoltState::new)
+	);
+	public static final SavedDataType<PistonBoltState> TYPE = new SavedDataType<>("wavecarpet_pistonbolt", PistonBoltState::new, CODEC, null);
 
 	public final Map<String, String> locationEncodings;
 
@@ -29,23 +33,7 @@ public class PistonBoltState extends SavedData {
 		this.locationEncodings = locationEncodings;
 	}
 
-	@Override
-	public CompoundTag save(CompoundTag tag, HolderLookup.Provider registries) {
-		var encodings = BOLT_ENCODINGS_CODEC.encodeStart(NbtOps.INSTANCE, locationEncodings).getOrThrow();
-		tag.put(LOCATION_ENCODINGS_KEY, encodings);
-		tag.putInt(STATE_VERSION_KEY, VERSION);
-		return tag;
-	}
-
-	public static PistonBoltState readNbt(CompoundTag tag, MinecraftServer server) {
-		int version = tag.getInt(STATE_VERSION_KEY);
-		var encodings = BOLT_ENCODINGS_CODEC.parse(NbtOps.INSTANCE, tag.getCompound(LOCATION_ENCODINGS_KEY)).getOrThrow();
-		var pistonBoltState = new PistonBoltState(encodings);
-		return pistonBoltState;
-	}
-
-	public static PistonBoltState load(MinecraftServer server) {
-		DimensionDataStorage stateManager = server.overworld().getDataStorage();
-		return stateManager.computeIfAbsent(new SavedData.Factory<>(PistonBoltState::new, (compound, registries) -> readNbt(compound, server), null), "wavecarpet_pistonbolt");
+	public PistonBoltState(Map<String, String> locationEncodings, int version) {
+		this(locationEncodings);
 	}
 }
