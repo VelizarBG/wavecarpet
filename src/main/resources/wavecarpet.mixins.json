@@ -13,6 +13,7 @@
         "feats.serversideGlobalConfig.CarpetMixin",
         "feats.serversideGlobalConfig.CarpetScriptServerMixin",
         "feats.suppressionCount.PacketUtilsMixin",
+        "rule.allowPlacingMasterBlocks.GameMasterBlockItemMixin",
         "rule.disableOpsBypassWhitelist.DedicatedPlayerListMixin",
         "rule.obtainableInvisibleItemFrames.AnvilMenuMixin",
         "rule.obtainableInvisibleItemFrames.HangingEntityItemAccessor",
