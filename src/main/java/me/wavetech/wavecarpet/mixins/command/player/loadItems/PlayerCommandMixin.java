@@ -1,6 +1,8 @@
 package me.wavetech.wavecarpet.mixins.command.player.loadItems;
 
 import carpet.commands.PlayerCommand;
+import com.llamalad7.mixinextras.expression.Definition;
+import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
@@ -23,15 +25,10 @@ public class PlayerCommandMixin {
 		throw new AssertionError();
 	}
 
-	@ModifyExpressionValue(
-		method = "register",
-		at = @At(
-			value = "INVOKE",
-			target = "Lnet/minecraft/commands/Commands;argument(Ljava/lang/String;Lcom/mojang/brigadier/arguments/ArgumentType;)Lcom/mojang/brigadier/builder/RequiredArgumentBuilder;",
-			ordinal = 0,
-			remap = true
-		)
-	)
+	@Definition(id = "argument", method = "Lnet/minecraft/commands/Commands;argument(Ljava/lang/String;Lcom/mojang/brigadier/arguments/ArgumentType;)Lcom/mojang/brigadier/builder/RequiredArgumentBuilder;", remap = true)
+	@Definition(id = "word", method = "Lcom/mojang/brigadier/arguments/StringArgumentType;word()Lcom/mojang/brigadier/arguments/StringArgumentType;")
+	@Expression("argument('player', word())")
+	@ModifyExpressionValue(method = "register", at = @At(value = "MIXINEXTRAS:EXPRESSION", ordinal = 0))
 	private static <T> RequiredArgumentBuilder<CommandSourceStack, T> insertLoadItemsParameter(RequiredArgumentBuilder<CommandSourceStack, T> original) {
 		return original.then(literal("loadItems").executes(context -> {
 			if (cantManipulate(context))
