@@ -18,7 +18,7 @@ public class PacketUtilsMixin {
 	@WrapOperation(method = "lambda$ensureRunningOnSameThread$0", constant = @Constant(classValue = ReportedException.class, ordinal = 0))
 	private static boolean countSuppression(Object object, Operation<Boolean> original, @Local(argsOnly = true) PacketListener packetListener) {
 		if (packetListener instanceof ServerGamePacketListenerImpl gamePL) {
-			gamePL.player.server.getScoreboard()
+			gamePL.player.getServer().getScoreboard()
 				.forAllObjectives(ObjectiveCriteriaRegistry.SUPPRESSION_COUNT, gamePL.player, ScoreAccess::increment);
 		}
 		return original.call(object);
