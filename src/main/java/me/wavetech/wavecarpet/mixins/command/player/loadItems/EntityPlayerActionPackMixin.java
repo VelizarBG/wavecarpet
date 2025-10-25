@@ -5,6 +5,8 @@ import com.llamalad7.mixinextras.sugar.Local;
 import me.wavetech.wavecarpet.core.ContainerMerger;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.level.block.ShulkerBoxBlock;
 import net.minecraft.world.phys.BlockHitResult;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -22,12 +24,32 @@ public class EntityPlayerActionPackMixin {
 		}
 	}
 
-	@Unique
-	private void transfer(ServerPlayer player, Container container) {
-		if (!container.stillValid(player) || !player.getLoadItems$wavecarpet())
-			return;
+    @Unique
+    private void transfer(ServerPlayer player, Container container) {
+        if (!container.stillValid(player) || !player.getLoadItems$wavecarpet())
+            return;
 
-		ContainerMerger.transfer(player.getInventory(), container);
-		player.closeContainer();
-	}
+        var inventory = player.getInventory();
+        var removedStacks = new java.util.ArrayList<net.minecraft.world.item.ItemStack>();
+
+        // Temporarily remove shulker boxes
+        for (int i = 0; i < inventory.getContainerSize(); i++) {
+            var stack = inventory.getItem(i);
+            if (!stack.isEmpty() && stack.getItem() instanceof BlockItem blockItem
+                    && blockItem.getBlock() instanceof ShulkerBoxBlock) {
+                removedStacks.add(stack.copy());
+                inventory.setItem(i, net.minecraft.world.item.ItemStack.EMPTY);
+            }
+        }
+
+        // Transfer remaining items using ContainerMerger
+        ContainerMerger.transfer(inventory, container);
+
+        // Restore shulker boxes
+        for (var stack : removedStacks) {
+            inventory.add(stack);
+        }
+
+        player.closeContainer();
+    }
 }
