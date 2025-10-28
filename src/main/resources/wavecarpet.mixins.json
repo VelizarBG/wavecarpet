@@ -12,7 +12,7 @@
         "command.player.startFallFlying.PlayerCommandMixin",
         "feats.serversideGlobalConfig.CarpetMixin",
         "feats.serversideGlobalConfig.CarpetScriptServerMixin",
-        "feats.suppressionCount.PacketUtilsMixin",
+        "feats.suppressionCount.PacketProcessorMixin",
         "rule.allowPlacingMasterBlocks.GameMasterBlockItemMixin",
         "rule.disableOpsBypassWhitelist.DedicatedPlayerListMixin",
         "rule.obtainableInvisibleItemFrames.AnvilMenuMixin",

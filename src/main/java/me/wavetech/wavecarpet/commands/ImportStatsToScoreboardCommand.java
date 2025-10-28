@@ -16,6 +16,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.ServerScoreboard;
+import net.minecraft.server.players.UserNameToIdResolver;
 import net.minecraft.stats.ServerStatsCounter;
 import net.minecraft.stats.Stat;
 import net.minecraft.stats.Stats;
@@ -100,8 +101,8 @@ public class ImportStatsToScoreboardCommand {
 				return;
 			}
 
-			var profile = playerStatsInfo.profile();
-			if (profile.isEmpty()) {
+			var name = playerStatsInfo.name();
+			if (name.isEmpty()) {
 				skippedUUIDs.add(playerStatsInfo.uuid());
 				return;
 			}
@@ -113,7 +114,7 @@ public class ImportStatsToScoreboardCommand {
 					skippedStats.add(stat.getName());
 					return;
 				}
-				ScoreHolder scoreHolder = ScoreHolder.fromGameProfile(profile.get());
+				ScoreHolder scoreHolder = ScoreHolder.forNameOnly(name.get());
 				setScoreTasks.add(
 					CompletableFuture.runAsync(
 						() -> scoreboard.getOrCreatePlayerScore(scoreHolder, objective).set(count),
@@ -131,12 +132,13 @@ public class ImportStatsToScoreboardCommand {
 		};
 
 		List<CompletableFuture<PlayerStatsInfo>> importStatsTasks = new ArrayList<>();
-		MinecraftSessionService sessionService = server.getSessionService();
+		UserNameToIdResolver nameToIdCache = server.services().nameToIdCache();
+		MinecraftSessionService sessionService = server.services().sessionService();
 		for (File statsFile : statsFiles) {
 			UUID uuid = UUID.fromString(statsFile.getName().substring(0, 36));
-			var gameProfile = server.getProfileCache().get(uuid);
+			var gameProfile = nameToIdCache.get(uuid);
 			if (gameProfile.isPresent()) {
-				importStatsTasks.add(CompletableFuture.completedFuture(new PlayerStatsInfo(uuid, gameProfile, statsFile))
+				importStatsTasks.add(CompletableFuture.completedFuture(new PlayerStatsInfo(uuid, Optional.of(gameProfile.get().name()), statsFile))
 					.whenCompleteAsync(importStatsFile, fileExecutor));
 			} else {
 				importStatsTasks.add(CompletableFuture.supplyAsync(() -> {
@@ -154,7 +156,7 @@ public class ImportStatsToScoreboardCommand {
 					return new PlayerStatsInfo(
 						uuid,
 						Optional.ofNullable(sessionService.fetchProfile(uuid, false))
-							.map(ProfileResult::profile),
+							.map(ProfileResult::profile).map(GameProfile::name),
 						statsFile
 					);
 				}, requestExecutor)
@@ -261,5 +263,5 @@ public class ImportStatsToScoreboardCommand {
 		return "stat." + stat.getValue().toString().replace(':', '.');
 	}
 
-	private record PlayerStatsInfo(UUID uuid, Optional<GameProfile> profile, File statsFile) {}
+	private record PlayerStatsInfo(UUID uuid, Optional<String> name, File statsFile) {}
 }
