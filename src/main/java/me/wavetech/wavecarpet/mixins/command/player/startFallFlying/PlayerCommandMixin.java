@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.At;
 
 import static net.minecraft.commands.Commands.literal;
 
-@Mixin(value = PlayerCommand.class, remap = false)
+@Mixin(value = PlayerCommand.class)
 public class PlayerCommandMixin {
 	@Shadow private static ServerPlayer getPlayer(CommandContext<CommandSourceStack> context) {
 		throw new AssertionError();
@@ -25,7 +25,7 @@ public class PlayerCommandMixin {
 		throw new AssertionError();
 	}
 
-	@Definition(id = "argument", method = "Lnet/minecraft/commands/Commands;argument(Ljava/lang/String;Lcom/mojang/brigadier/arguments/ArgumentType;)Lcom/mojang/brigadier/builder/RequiredArgumentBuilder;", remap = true)
+	@Definition(id = "argument", method = "Lnet/minecraft/commands/Commands;argument(Ljava/lang/String;Lcom/mojang/brigadier/arguments/ArgumentType;)Lcom/mojang/brigadier/builder/RequiredArgumentBuilder;")
 	@Definition(id = "word", method = "Lcom/mojang/brigadier/arguments/StringArgumentType;word()Lcom/mojang/brigadier/arguments/StringArgumentType;")
 	@Expression("argument('player', word())")
 	@ModifyExpressionValue(method = "register", at = @At(value = "MIXINEXTRAS:EXPRESSION", ordinal = 0))

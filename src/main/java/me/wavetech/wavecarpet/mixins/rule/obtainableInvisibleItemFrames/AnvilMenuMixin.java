@@ -39,7 +39,7 @@ public class AnvilMenuMixin {
 			var data = new CompoundTag();
 			data.put("Invisible", ByteTag.ONE);
 			stack.set(DataComponents.ENTITY_DATA, TypedEntityData.of(((HangingEntityItemAccessor) item).getType(), data));
-			value = (T) Component.literal("Invisible " + item.getName().getString())
+			value = (T) Component.literal("Invisible " + item.getName(stack).getString())
 					.setStyle(Style.EMPTY.withItalic(false));
 		}
 		return original.call(stack, component, value);

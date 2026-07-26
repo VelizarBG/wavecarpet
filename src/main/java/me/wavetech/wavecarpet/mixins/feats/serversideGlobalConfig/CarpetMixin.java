@@ -7,7 +7,7 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
-@Mixin(value = Carpet.class, remap = false)
+@Mixin(value = Carpet.class)
 public class CarpetMixin {
 	@Definition(id = "getInstance", method = "Lnet/fabricmc/loader/api/FabricLoader;getInstance()Lnet/fabricmc/loader/api/FabricLoader;")
 	@Definition(id = "getEnvironmentType", method = "Lnet/fabricmc/loader/api/FabricLoader;getEnvironmentType()Lnet/fabricmc/api/EnvType;")

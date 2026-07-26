@@ -2,6 +2,7 @@ package me.wavetech.wavecarpet.core;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.saveddata.SavedDataType;
 
@@ -18,10 +19,10 @@ public class PistonBoltState extends SavedData {
 	public static final Codec<PistonBoltState> CODEC = RecordCodecBuilder.create(
 		instance -> instance.group(
 			BOLT_ENCODINGS_CODEC.fieldOf(LOCATION_ENCODINGS_KEY).forGetter(i -> i.locationEncodings),
-			Codec.INT.fieldOf(STATE_VERSION_KEY).forGetter(i -> VERSION)
+			Codec.INT.fieldOf(STATE_VERSION_KEY).forGetter(_ -> VERSION)
 		).apply(instance, PistonBoltState::new)
 	);
-	public static final SavedDataType<PistonBoltState> TYPE = new SavedDataType<>("wavecarpet_pistonbolt", PistonBoltState::new, CODEC, null);
+	public static final SavedDataType<PistonBoltState> TYPE = new SavedDataType<>(Identifier.fromNamespaceAndPath("", "wavecarpet_pistonbolt"), PistonBoltState::new, CODEC, null);
 
 	public final Map<String, String> locationEncodings;
 

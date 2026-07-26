@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(value = CarpetScriptServer.class, remap = false)
+@Mixin(value = CarpetScriptServer.class)
 public class CarpetScriptServerMixin {
 	@Unique
 	private boolean loadGlobalModules = false;

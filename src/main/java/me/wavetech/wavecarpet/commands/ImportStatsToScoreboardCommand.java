@@ -195,35 +195,35 @@ public class ImportStatsToScoreboardCommand {
 		for (Item item : BuiltInRegistries.ITEM) {
 			var stat = Stats.ITEM_CRAFTED.get(item);
 			var objectiveName = "c-" + BuiltInRegistries.ITEM.wrapAsHolder(item).unwrapKey().orElseThrow().identifier().getPath();
-			var displayName = Component.literal("Crafted - ").append(item.getName());
+			var displayName = Component.literal("Crafted - ").append(getName(item));
 			statToObjective.put(stat, createObjective(scoreboard, stat, objectiveName, displayName));
 		}
 
 		for (Item item : BuiltInRegistries.ITEM) {
 			var stat = Stats.ITEM_USED.get(item);
 			var objectiveName = "u-" + BuiltInRegistries.ITEM.wrapAsHolder(item).unwrapKey().orElseThrow().identifier().getPath();
-			var displayName = Component.literal("Used - ").append(item.getName());
+			var displayName = Component.literal("Used - ").append(getName(item));
 			statToObjective.put(stat, createObjective(scoreboard, stat, objectiveName, displayName));
 		}
 
 		for (Item item : BuiltInRegistries.ITEM) {
 			var stat = Stats.ITEM_BROKEN.get(item);
 			var objectiveName = "b-" + BuiltInRegistries.ITEM.wrapAsHolder(item).unwrapKey().orElseThrow().identifier().getPath();
-			var displayName = Component.literal("Broken - ").append(item.getName());
+			var displayName = Component.literal("Broken - ").append(getName(item));
 			statToObjective.put(stat, createObjective(scoreboard, stat, objectiveName, displayName));
 		}
 
 		for (Item item : BuiltInRegistries.ITEM) {
 			var stat = Stats.ITEM_PICKED_UP.get(item);
 			var objectiveName = "p-" + BuiltInRegistries.ITEM.wrapAsHolder(item).unwrapKey().orElseThrow().identifier().getPath();
-			var displayName = Component.literal("Picked Up - ").append(item.getName());
+			var displayName = Component.literal("Picked Up - ").append(getName(item));
 			statToObjective.put(stat, createObjective(scoreboard, stat, objectiveName, displayName));
 		}
 
 		for (Item item : BuiltInRegistries.ITEM) {
 			var stat = Stats.ITEM_DROPPED.get(item);
 			var objectiveName = "d-" + BuiltInRegistries.ITEM.wrapAsHolder(item).unwrapKey().orElseThrow().identifier().getPath();
-			var displayName = Component.literal("Dropped - ").append(item.getName());
+			var displayName = Component.literal("Dropped - ").append(getName(item));
 			statToObjective.put(stat, createObjective(scoreboard, stat, objectiveName, displayName));
 		}
 
@@ -268,6 +268,10 @@ public class ImportStatsToScoreboardCommand {
 
 	private static String getTranslationKey(Stat<Identifier> stat) {
 		return "stat." + stat.getValue().toString().replace(':', '.');
+	}
+	
+	private static Component getName(Item item) {
+		return Component.translatable(item.getDescriptionId());
 	}
 
 	private record PlayerStatsInfo(UUID uuid, Optional<String> name, Path statsFile) {}
