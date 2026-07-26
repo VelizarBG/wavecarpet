@@ -9,17 +9,17 @@ import com.mojang.authlib.yggdrasil.ProfileResult;
 import com.mojang.brigadier.CommandDispatcher;
 import me.wavetech.wavecarpet.WaveCarpetSettings;
 import me.wavetech.wavecarpet.mixins.command.importStatsToScoreboard.StatsCounterAccessor;
-import net.minecraft.Util;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.ServerScoreboard;
 import net.minecraft.server.players.UserNameToIdResolver;
 import net.minecraft.stats.ServerStatsCounter;
 import net.minecraft.stats.Stat;
 import net.minecraft.stats.Stats;
+import net.minecraft.util.Util;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -28,14 +28,14 @@ import net.minecraft.world.scores.Objective;
 import net.minecraft.world.scores.ScoreHolder;
 import net.minecraft.world.scores.Scoreboard;
 import net.minecraft.world.scores.criteria.ObjectiveCriteria;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.mutable.MutableInt;
 
-import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.Duration;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -47,6 +47,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.function.BiConsumer;
+import java.util.stream.Stream;
 
 import static carpet.utils.Translations.tr;
 import static me.wavetech.wavecarpet.WaveCarpetMod.LOGGER;
@@ -88,13 +89,19 @@ public class ImportStatsToScoreboardCommand {
 		Executor requestExecutor = Executors.newSingleThreadExecutor(new ThreadFactoryBuilder().setNameFormat("Request thread").build());
 		var stopwatch = Stopwatch.createStarted();
 
-		File statsDir = server.getWorldPath(LevelResource.PLAYER_STATS_DIR).toFile();
+		Path statsDir = server.getWorldPath(LevelResource.PLAYER_STATS_DIR);
 		List<UUID> skippedUUIDs = new ArrayList<>();
 		Set<String> skippedStats = new HashSet<>();
 		ServerScoreboard scoreboard = server.getScoreboard();
 		List<CompletableFuture<Void>> setScoreTasks = new ArrayList<>();
 		MutableInt importedFiles = new MutableInt();
-		Collection<File> statsFiles = FileUtils.listFiles(statsDir, new String[]{"json"}, false);
+		List<Path> statsFiles;
+		try (Stream<Path> files = Files.walk(statsDir)) {
+			statsFiles = files.filter(p -> !Files.isDirectory(p) && p.toString().endsWith(".json")).toList();
+		} catch (IOException e) {
+			LOGGER.error("An error occurred while walking stats dir", e);
+			return;
+		}
 		BiConsumer<PlayerStatsInfo, Throwable> importStatsFile = (playerStatsInfo, ex) -> {
 			if (ex != null) {
 				LOGGER.error("Unexpected error occurred while fetching player profile", ex);
@@ -134,8 +141,8 @@ public class ImportStatsToScoreboardCommand {
 		List<CompletableFuture<PlayerStatsInfo>> importStatsTasks = new ArrayList<>();
 		UserNameToIdResolver nameToIdCache = server.services().nameToIdCache();
 		MinecraftSessionService sessionService = server.services().sessionService();
-		for (File statsFile : statsFiles) {
-			UUID uuid = UUID.fromString(statsFile.getName().substring(0, 36));
+		for (Path statsFile : statsFiles) {
+			UUID uuid = UUID.fromString(statsFile.getFileName().toString().substring(0, 36));
 			var gameProfile = nameToIdCache.get(uuid);
 			if (gameProfile.isPresent()) {
 				importStatsTasks.add(CompletableFuture.completedFuture(new PlayerStatsInfo(uuid, Optional.of(gameProfile.get().name()), statsFile))
@@ -180,61 +187,61 @@ public class ImportStatsToScoreboardCommand {
 
 		for (Block block : BuiltInRegistries.BLOCK) {
 			var stat = Stats.BLOCK_MINED.get(block);
-			var objectiveName = "m-" + BuiltInRegistries.BLOCK.wrapAsHolder(block).unwrapKey().orElseThrow().location().getPath();
+			var objectiveName = "m-" + BuiltInRegistries.BLOCK.wrapAsHolder(block).unwrapKey().orElseThrow().identifier().getPath();
 			var displayName = Component.literal("Mined - ").append(block.getName());
 			statToObjective.put(stat, createObjective(scoreboard, stat, objectiveName, displayName));
 		}
 
 		for (Item item : BuiltInRegistries.ITEM) {
 			var stat = Stats.ITEM_CRAFTED.get(item);
-			var objectiveName = "c-" + BuiltInRegistries.ITEM.wrapAsHolder(item).unwrapKey().orElseThrow().location().getPath();
+			var objectiveName = "c-" + BuiltInRegistries.ITEM.wrapAsHolder(item).unwrapKey().orElseThrow().identifier().getPath();
 			var displayName = Component.literal("Crafted - ").append(item.getName());
 			statToObjective.put(stat, createObjective(scoreboard, stat, objectiveName, displayName));
 		}
 
 		for (Item item : BuiltInRegistries.ITEM) {
 			var stat = Stats.ITEM_USED.get(item);
-			var objectiveName = "u-" + BuiltInRegistries.ITEM.wrapAsHolder(item).unwrapKey().orElseThrow().location().getPath();
+			var objectiveName = "u-" + BuiltInRegistries.ITEM.wrapAsHolder(item).unwrapKey().orElseThrow().identifier().getPath();
 			var displayName = Component.literal("Used - ").append(item.getName());
 			statToObjective.put(stat, createObjective(scoreboard, stat, objectiveName, displayName));
 		}
 
 		for (Item item : BuiltInRegistries.ITEM) {
 			var stat = Stats.ITEM_BROKEN.get(item);
-			var objectiveName = "b-" + BuiltInRegistries.ITEM.wrapAsHolder(item).unwrapKey().orElseThrow().location().getPath();
+			var objectiveName = "b-" + BuiltInRegistries.ITEM.wrapAsHolder(item).unwrapKey().orElseThrow().identifier().getPath();
 			var displayName = Component.literal("Broken - ").append(item.getName());
 			statToObjective.put(stat, createObjective(scoreboard, stat, objectiveName, displayName));
 		}
 
 		for (Item item : BuiltInRegistries.ITEM) {
 			var stat = Stats.ITEM_PICKED_UP.get(item);
-			var objectiveName = "p-" + BuiltInRegistries.ITEM.wrapAsHolder(item).unwrapKey().orElseThrow().location().getPath();
+			var objectiveName = "p-" + BuiltInRegistries.ITEM.wrapAsHolder(item).unwrapKey().orElseThrow().identifier().getPath();
 			var displayName = Component.literal("Picked Up - ").append(item.getName());
 			statToObjective.put(stat, createObjective(scoreboard, stat, objectiveName, displayName));
 		}
 
 		for (Item item : BuiltInRegistries.ITEM) {
 			var stat = Stats.ITEM_DROPPED.get(item);
-			var objectiveName = "d-" + BuiltInRegistries.ITEM.wrapAsHolder(item).unwrapKey().orElseThrow().location().getPath();
+			var objectiveName = "d-" + BuiltInRegistries.ITEM.wrapAsHolder(item).unwrapKey().orElseThrow().identifier().getPath();
 			var displayName = Component.literal("Dropped - ").append(item.getName());
 			statToObjective.put(stat, createObjective(scoreboard, stat, objectiveName, displayName));
 		}
 
 		for (EntityType<?> entity : BuiltInRegistries.ENTITY_TYPE) {
 			var stat = Stats.ENTITY_KILLED.get(entity);
-			var objectiveName = "k-" + BuiltInRegistries.ENTITY_TYPE.wrapAsHolder(entity).unwrapKey().orElseThrow().location().getPath();
+			var objectiveName = "k-" + BuiltInRegistries.ENTITY_TYPE.wrapAsHolder(entity).unwrapKey().orElseThrow().identifier().getPath();
 			var displayName = Component.literal("Killed - ").append(entity.getDescription());
 			statToObjective.put(stat, createObjective(scoreboard, stat, objectiveName, displayName));
 		}
 
 		for (EntityType<?> entity : BuiltInRegistries.ENTITY_TYPE) {
 			var stat = Stats.ENTITY_KILLED_BY.get(entity);
-			var objectiveName = "kb-" + BuiltInRegistries.ENTITY_TYPE.wrapAsHolder(entity).unwrapKey().orElseThrow().location().getPath();
+			var objectiveName = "kb-" + BuiltInRegistries.ENTITY_TYPE.wrapAsHolder(entity).unwrapKey().orElseThrow().identifier().getPath();
 			var displayName = Component.literal("Killed By - ").append(entity.getDescription());
 			statToObjective.put(stat, createObjective(scoreboard, stat, objectiveName, displayName));
 		}
 
-		for (ResourceLocation custom : BuiltInRegistries.CUSTOM_STAT) {
+		for (Identifier custom : BuiltInRegistries.CUSTOM_STAT) {
 			var stat = Stats.CUSTOM.get(custom);
 			var objectiveName = "z-" + custom.getPath();
 			var displayName = Component.translatable(getTranslationKey(stat));
@@ -259,9 +266,9 @@ public class ImportStatsToScoreboardCommand {
 		);
 	}
 
-	private static String getTranslationKey(Stat<ResourceLocation> stat) {
+	private static String getTranslationKey(Stat<Identifier> stat) {
 		return "stat." + stat.getValue().toString().replace(':', '.');
 	}
 
-	private record PlayerStatsInfo(UUID uuid, Optional<String> name, File statsFile) {}
+	private record PlayerStatsInfo(UUID uuid, Optional<String> name, Path statsFile) {}
 }

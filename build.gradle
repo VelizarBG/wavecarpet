@@ -42,6 +42,10 @@ afterEvaluate {
 	}
 }
 
+loom {
+	accessWidenerPath = file("src/main/resources/wavecarpet.classtweaker")
+}
+
 dependencies {
 //	vineflowerDecompilerClasspath "org.vineflower:vineflower:1.11.0-20241216.173618-56"
 
