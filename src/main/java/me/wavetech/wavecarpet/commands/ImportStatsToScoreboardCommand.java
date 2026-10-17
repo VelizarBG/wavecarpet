@@ -4,8 +4,8 @@ import carpet.utils.CommandHelper;
 import com.google.common.base.Stopwatch;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.minecraft.MinecraftSessionService;
-import com.mojang.authlib.yggdrasil.ProfileResult;
+import com.mojang.authlib.minecraft.SessionService;
+import com.mojang.authlib.services.ProfileResult;
 import com.mojang.brigadier.CommandDispatcher;
 import me.wavetech.wavecarpet.WaveCarpetSettings;
 import me.wavetech.wavecarpet.mixins.command.importStatsToScoreboard.StatsCounterAccessor;
@@ -140,7 +140,7 @@ public class ImportStatsToScoreboardCommand {
 
 		List<CompletableFuture<PlayerStatsInfo>> importStatsTasks = new ArrayList<>();
 		UserNameToIdResolver nameToIdCache = server.services().nameToIdCache();
-		MinecraftSessionService sessionService = server.services().sessionService();
+		SessionService sessionService = server.services().sessionService();
 		for (Path statsFile : statsFiles) {
 			UUID uuid = UUID.fromString(statsFile.getFileName().toString().substring(0, 36));
 			var gameProfile = nameToIdCache.get(uuid);
