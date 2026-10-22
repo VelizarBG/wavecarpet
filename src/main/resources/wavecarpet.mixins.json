@@ -10,6 +10,7 @@
         "command.player.loadItems.PlayerCommandMixin",
         "command.player.loadItems.ServerPlayerMixin",
         "command.player.startFallFlying.PlayerCommandMixin",
+        "feats.ignoreNbtAccounterExceptionDuringWorldUpgrade.RegionStorageUpgraderMixin",
         "feats.serversideGlobalConfig.CarpetMixin",
         "feats.serversideGlobalConfig.CarpetScriptServerMixin",
         "feats.suppressionCount.PacketProcessorMixin",
