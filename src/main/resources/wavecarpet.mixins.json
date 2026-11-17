@@ -19,6 +19,8 @@
         "feats.suppressionCount.PacketProcessorMixin",
         "rule.allowPlacingMasterBlocks.GameMasterBlockItemMixin",
         "rule.disableOpsBypassWhitelist.DedicatedPlayerListMixin",
+        "rule.individualLocatorBar.ServerWaypointManagerAccessor",
+        "rule.individualLocatorBar.ServerWaypointManagerMixin",
         "rule.obtainableInvisibleItemFrames.AnvilMenuMixin",
         "rule.obtainableInvisibleItemFrames.HangingEntityItemAccessor",
         "rule.obtainableInvisibleItemFrames.ItemFrameMixin",

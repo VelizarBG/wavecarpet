@@ -28,4 +28,7 @@ public class WaveCarpetSettings {
 
 	@Rule(categories = { WAVETECH, SURVIVAL, COMMAND })
 	public static boolean waveInstamineDeepslate = false;
+
+	@Rule(categories = { WAVETECH, SURVIVAL, COMMAND })
+	public static boolean individualLocatorBar = false;
 }

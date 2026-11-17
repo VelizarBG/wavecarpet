@@ -64,7 +64,7 @@ public abstract class ServerPlayerMixin implements SubscriptionPlayer {
 		} else {
 			subscribed = false;
 		}
-		SubscriptionsSync.sync((ServerPlayer) (Object) this);
+		Subscriptions.onSubscriptionChange((ServerPlayer) (Object) this, id, subscribed);
 		return subscribed;
 	}
 }

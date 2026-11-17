@@ -2,10 +2,13 @@ package me.wavetech.wavecarpet.core;
 
 import com.mojang.serialization.Codec;
 import me.wavetech.wavecarpet.WaveCarpetSettings;
+import me.wavetech.wavecarpet.mixins.rule.individualLocatorBar.ServerWaypointManagerAccessor;
+import me.wavetech.wavecarpet.network.SubscriptionsSync;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.Identifier;
+import net.minecraft.server.level.ServerPlayer;
 
 import java.util.*;
 import java.util.function.BooleanSupplier;
@@ -19,6 +22,7 @@ public final class Subscriptions {
 
 	public static void registerDefaults() {
 		register(SubscriptionIds.INSTAMINE_DEEPSLATE, () -> WaveCarpetSettings.waveInstamineDeepslate);
+		register(SubscriptionIds.INDIVIDUAL_LOCATOR_BAR, () -> WaveCarpetSettings.individualLocatorBar);
 	}
 
 	public static void register(Identifier id, BooleanSupplier available) {
@@ -38,5 +42,17 @@ public final class Subscriptions {
 
 	public static Collection<Identifier> availableIds() {
 		return AVAILABLE.keySet().stream().filter(Subscriptions::isAvailable).toList();
+	}
+
+	public static void onSubscriptionChange(ServerPlayer player, Identifier subscription, boolean subscribed) {
+		SubscriptionsSync.sync(player);
+
+		if (subscription.equals(SubscriptionIds.INDIVIDUAL_LOCATOR_BAR) && !subscribed) {
+			var waypointManager = ((ServerWaypointManagerAccessor) player.level().getWaypointManager());
+			waypointManager.getConnections().row(player).values().removeIf(connection -> {
+				connection.disconnect();
+				return true;
+			});
+		}
 	}
 }
