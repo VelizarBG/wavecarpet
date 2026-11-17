@@ -3,6 +3,7 @@ package me.wavetech.wavecarpet.mixins.command;
 import com.mojang.brigadier.CommandDispatcher;
 import me.wavetech.wavecarpet.commands.ImportStatsToScoreboardCommand;
 import me.wavetech.wavecarpet.commands.PistonBoltCommand;
+import me.wavetech.wavecarpet.commands.SubscribeCommand;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -21,5 +22,6 @@ public class CommandsMixin {
 	private void addCommands(Commands.CommandSelection selection, CommandBuildContext buildContext, CallbackInfo ci) {
 		ImportStatsToScoreboardCommand.register(this.dispatcher);
 		PistonBoltCommand.register(this.dispatcher);
+		SubscribeCommand.register(this.dispatcher);
 	}
 }

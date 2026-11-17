@@ -25,4 +25,7 @@ public class WaveCarpetSettings {
 
 	@Rule(categories = { WAVETECH, SURVIVAL, FEATURE })
 	public static boolean allowPlacingMasterBlocks = false;
+
+	@Rule(categories = { WAVETECH, SURVIVAL, COMMAND })
+	public static boolean waveInstamineDeepslate = false;
 }

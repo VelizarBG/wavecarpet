@@ -1,3 +1,4 @@
 classTweaker v1 official
 
 inject-interface net/minecraft/server/level/ServerPlayer me/wavetech/wavecarpet/access/PlayerLoader
+inject-interface net/minecraft/server/level/ServerPlayer me/wavetech/wavecarpet/core/SubscriptionPlayer

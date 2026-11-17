@@ -7,7 +7,11 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.Strictness;
 import com.google.gson.reflect.TypeToken;
 import me.wavetech.wavecarpet.core.PistonBoltState;
+import me.wavetech.wavecarpet.core.Subscriptions;
+import me.wavetech.wavecarpet.network.ClientboundSubscriptionsPacket;
+import me.wavetech.wavecarpet.network.SubscriptionsSync;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.minecraft.server.MinecraftServer;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -27,6 +31,9 @@ public class WaveCarpetMod implements ModInitializer, CarpetExtension {
 	@Override
 	public void onInitialize() {
 		CarpetServer.manageExtension(new WaveCarpetMod());
+		PayloadTypeRegistry.clientboundPlay().register(ClientboundSubscriptionsPacket.TYPE, ClientboundSubscriptionsPacket.STREAM_CODEC);
+		Subscriptions.registerDefaults();
+		SubscriptionsSync.init();
 	}
 
 	@Override

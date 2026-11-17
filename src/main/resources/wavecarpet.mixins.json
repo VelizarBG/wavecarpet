@@ -14,6 +14,8 @@
         "feats.ignoreNbtAccounterExceptionDuringWorldUpgrade.RegionStorageUpgraderMixin",
         "feats.serversideGlobalConfig.CarpetMixin",
         "feats.serversideGlobalConfig.CarpetScriptServerMixin",
+        "feats.subscriptions.PlayerListMixin",
+        "feats.subscriptions.ServerPlayerMixin",
         "feats.suppressionCount.PacketProcessorMixin",
         "rule.allowPlacingMasterBlocks.GameMasterBlockItemMixin",
         "rule.disableOpsBypassWhitelist.DedicatedPlayerListMixin",
@@ -21,11 +23,13 @@
         "rule.obtainableInvisibleItemFrames.HangingEntityItemAccessor",
         "rule.obtainableInvisibleItemFrames.ItemFrameMixin",
         "rule.stopLightRecalculationDataFix.ChunkDeleteLightFixMixin",
+        "rule.waveInstamineDeepslate.BlockBehaviourMixin",
         "utils.customCriteria.ObjectiveCriteriaAccessor",
         "utils.customCriteria.ObjectiveCriteriaMixin",
         "utils.customCriteria.ScoreboardCommandMixin"
     ],
     "client": [
+        "rule.waveInstamineDeepslate.client.BlockBehaviourMixin"
     ],
     "injectors": {
         "defaultRequire": 1

@@ -17,6 +17,9 @@
     "entrypoints": {
         "main": [
             "me.wavetech.wavecarpet.WaveCarpetMod"
+        ],
+        "client": [
+            "me.wavetech.wavecarpet.client.WaveCarpetClient"
         ]
     },
     "mixins": [
